@@ -2,6 +2,7 @@ package com.athomas.AppMonitor;
 
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.IBinder;
@@ -100,8 +101,12 @@ public class AppMonitorService extends Service {
 
         // add view on top of other apps
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+
         resultView = new TextView(this);
         resultView.setBackgroundColor(getResources().getColor(R.color.background_color));
+        resultView.setTextSize(6);
+        resultView.setTextColor(Color.CYAN);
+        resultView.setPadding(6, 6, 6, 6);
 
         resultView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -118,9 +123,6 @@ public class AppMonitorService extends Service {
                 PixelFormat.TRANSLUCENT);
 
         params.gravity = Gravity.BOTTOM | Gravity.LEFT;
-
-        resultView.setTextSize(6);
-        resultView.setPadding(6, 6, 6, 6);
 
         windowManager.addView(resultView, params);
     }
