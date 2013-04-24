@@ -99,6 +99,8 @@ public class AppMonitorService extends Service {
     public void onCreate() {
         super.onCreate();
 
+        BusProvider.get().register(this);
+
         // add view on top of other apps
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
 
@@ -132,6 +134,7 @@ public class AppMonitorService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
+        BusProvider.get().unregister(this);
         if(resultView != null) {
             windowManager.removeView(resultView);
         }
@@ -141,5 +144,11 @@ public class AppMonitorService extends Service {
     public IBinder onBind(Intent intent) {
         return null;
     }
+
+    @Subscribe
+    public void handleStopServiceEvent(StopServiceEvent event) {
+        stopSelf();
+    }
+
 
 }

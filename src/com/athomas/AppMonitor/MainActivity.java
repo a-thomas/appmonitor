@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import com.athomas.AppMonitor.event.StopServiceEvent;
 
 
 /**
@@ -40,6 +41,14 @@ public class MainActivity extends Activity {
                     intent.putExtra(AppMonitorService.EXTRA_PACKAGE_NAME, packageName);
                     startService(intent);
                 }
+            }
+        });
+
+        Button stopButton = (Button) findViewById(R.id.stop);
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                BusProvider.get().post(new StopServiceEvent());
             }
         });
     }
