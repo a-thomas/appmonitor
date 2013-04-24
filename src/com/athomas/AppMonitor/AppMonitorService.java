@@ -23,9 +23,9 @@ public class AppMonitorService extends Service {
 
     public static final String EXTRA_PACKAGE_NAME = "package_name";
     public static final String EXTRA_SAVE_VALUES = "save_values";
+    public static final String EXTRA_INTERVAL = "interval";
 
     private final static String TAG = AppMonitorService.class.getSimpleName();
-    private final static int DELAY = 2500;
 
     private Handler handler = new Handler();
     private FileManager fileManager = new FileManager();
@@ -35,12 +35,13 @@ public class AppMonitorService extends Service {
 
     private String packageName;
     private boolean saveValues;
+    private int interval;
 
     private Runnable repetitiveTask = new Runnable() {
         @Override
         public void run() {
             String result = new StringBuilder()
-                    .append("launched every " + DELAY / 1000 +"s")
+                    .append("launched every " + interval / 1000 +"s")
                     .append("\n")
                     .append(Cmd.$().cpuinfo().lines(4).exec())
                     .append("Battery")
@@ -72,7 +73,7 @@ public class AppMonitorService extends Service {
             }
 
             // get the current time
-            handler.postDelayed(this, DELAY);
+            handler.postDelayed(this, interval);
         }
     };
 
@@ -90,6 +91,7 @@ public class AppMonitorService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         packageName = intent.getStringExtra(EXTRA_PACKAGE_NAME);
         saveValues = intent.getBooleanExtra(EXTRA_SAVE_VALUES, false);
+        interval = intent.getIntExtra(EXTRA_INTERVAL, 3000);
 
         handler.post(repetitiveTask);
         return Service.START_STICKY;
@@ -134,6 +136,7 @@ public class AppMonitorService extends Service {
     public void onDestroy() {
         super.onDestroy();
 
+        handler.removeCallbacks(repetitiveTask);
         BusProvider.get().unregister(this);
         if(resultView != null) {
             windowManager.removeView(resultView);

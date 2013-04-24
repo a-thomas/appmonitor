@@ -18,6 +18,19 @@
             android:layout_height="50dp"
             android:hint="com.example.app"/>
 
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="Interval (ms)"/>
+
+    <EditText
+            android:id="@+id/interval"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:inputType="numberDecimal"
+            android:hint="3000"/>
+
     <Button android:id="@+id/start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

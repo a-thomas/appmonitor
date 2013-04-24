@@ -2,10 +2,7 @@ package com.athomas.AppMonitor;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -21,6 +18,7 @@ import com.athomas.AppMonitor.event.StopServiceEvent;
 public class MainActivity extends Activity {
 
     private EditText packageNameField;
+    private EditText intervalField;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +26,7 @@ public class MainActivity extends Activity {
 
 
         packageNameField = (EditText) findViewById(R.id.package_name);
+        intervalField = (EditText) findViewById(R.id.interval);
 
         Button startButton = (Button) findViewById(R.id.start);
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -39,6 +38,13 @@ public class MainActivity extends Activity {
                 } else {
                     Intent intent = new Intent(MainActivity.this, AppMonitorService.class);
                     intent.putExtra(AppMonitorService.EXTRA_PACKAGE_NAME, packageName);
+
+                    String intervalString = intervalField.getText().toString();
+                    if (!TextUtils.isEmpty(intervalString)) {
+                        int interval = Integer.parseInt(intervalString);
+                        intent.putExtra(AppMonitorService.EXTRA_INTERVAL, interval);
+                    }
+
                     startService(intent);
                 }
             }
