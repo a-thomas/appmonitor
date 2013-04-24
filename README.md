@@ -1,6 +1,5 @@
 ## AppMonitor
 
-
 A simple application to monitor your android app.
 
 ### Features :
@@ -12,8 +11,6 @@ A simple application to monitor your android app.
 
 ### TODO :
 
-* Allow to change the time interval between sample
-* Allow to change the number of "top process"
 * Allow to change the filename/path
 * Allow to modify the position of the monitor window
 

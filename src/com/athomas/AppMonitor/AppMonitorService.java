@@ -24,6 +24,7 @@ public class AppMonitorService extends Service {
     public static final String EXTRA_PACKAGE_NAME = "package_name";
     public static final String EXTRA_SAVE_VALUES = "save_values";
     public static final String EXTRA_INTERVAL = "interval";
+    public static final String EXTRA_TOP_PROCESSES = "top_processes";
 
     private final static String TAG = AppMonitorService.class.getSimpleName();
 
@@ -36,6 +37,7 @@ public class AppMonitorService extends Service {
     private String packageName;
     private boolean saveValues;
     private int interval;
+    private int topProcesses;
 
     private Runnable repetitiveTask = new Runnable() {
         @Override
@@ -43,7 +45,7 @@ public class AppMonitorService extends Service {
             String result = new StringBuilder()
                     .append("launched every " + interval / 1000 +"s")
                     .append("\n")
-                    .append(Cmd.$().cpuinfo().lines(4).exec())
+                    .append(Cmd.$().cpuinfo().lines(topProcesses + 1).exec())
                     .append("Battery")
                     .append(Cmd.$().battery().grep("level").exec())
                     .append("Native size: ")
@@ -92,6 +94,7 @@ public class AppMonitorService extends Service {
         packageName = intent.getStringExtra(EXTRA_PACKAGE_NAME);
         saveValues = intent.getBooleanExtra(EXTRA_SAVE_VALUES, false);
         interval = intent.getIntExtra(EXTRA_INTERVAL, 3000);
+        topProcesses = intent.getIntExtra(EXTRA_TOP_PROCESSES, 4);
 
         handler.post(repetitiveTask);
         return Service.START_STICKY;

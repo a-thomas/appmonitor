@@ -19,6 +19,7 @@ public class MainActivity extends Activity {
 
     private EditText packageNameField;
     private EditText intervalField;
+    private EditText topProcessesField;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,6 +28,8 @@ public class MainActivity extends Activity {
 
         packageNameField = (EditText) findViewById(R.id.package_name);
         intervalField = (EditText) findViewById(R.id.interval);
+        topProcessesField = (EditText) findViewById(R.id.top_processes);
+        
 
         Button startButton = (Button) findViewById(R.id.start);
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -43,6 +46,12 @@ public class MainActivity extends Activity {
                     if (!TextUtils.isEmpty(intervalString)) {
                         int interval = Integer.parseInt(intervalString);
                         intent.putExtra(AppMonitorService.EXTRA_INTERVAL, interval);
+                    }
+
+                    String topProcessesString = topProcessesField.getText().toString();
+                    if (!TextUtils.isEmpty(topProcessesString)) {
+                        int topProcesses = Integer.parseInt(topProcessesString);
+                        intent.putExtra(AppMonitorService.EXTRA_TOP_PROCESSES, topProcesses);
                     }
 
                     startService(intent);

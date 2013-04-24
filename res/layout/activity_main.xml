@@ -31,6 +31,19 @@
             android:inputType="numberDecimal"
             android:hint="3000"/>
 
+    <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:text="Number of top processes"/>
+
+    <EditText
+            android:id="@+id/top_processes"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:inputType="numberDecimal"
+            android:hint="4"/>
+
     <Button android:id="@+id/start"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
