@@ -12,10 +12,9 @@ A simple application to monitor your android app.
 
 ### TODO :
 
-* Add layout + buttons
-* Allow to change the package name
 * Allow to change the time interval between sample
 * Allow to change the number of "top process"
 * Allow to change the filename/path
+* Allow to modify the position of the monitor window
 
 
