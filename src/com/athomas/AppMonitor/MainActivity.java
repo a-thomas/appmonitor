@@ -2,6 +2,8 @@ package com.athomas.AppMonitor;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 
 
@@ -13,9 +15,8 @@ public class MainActivity extends Activity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Intent intent = new Intent(this, AppMonitorService.class);
+        intent.putExtra(AppMonitorService.EXTRA_PACKAGE_NAME, "com.jb.gosms");
         startService(intent);
     }
-
 }

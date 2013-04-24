@@ -20,8 +20,11 @@ import java.util.Date;
 
 public class AppMonitorService extends Service {
 
+    public static final String EXTRA_PACKAGE_NAME = "package_name";
+    public static final String EXTRA_SAVE_VALUES = "save_values";
+
     private final static String TAG = AppMonitorService.class.getSimpleName();
-    private final static int DELAY = 1000;
+    private final static int DELAY = 2500;
 
     private Handler handler = new Handler();
     private FileManager fileManager = new FileManager();
@@ -29,24 +32,38 @@ public class AppMonitorService extends Service {
     private WindowManager windowManager;
     private TextView resultView;
 
+    private String packageName;
+    private boolean saveValues;
+
     private Runnable repetitiveTask = new Runnable() {
         @Override
         public void run() {
-            // display cpu info + battery level
             String result = new StringBuilder()
-                    .append(Dumpsys.$().cpuInfo().lines(4).exec())
-                    .append(Dumpsys.$().battery().grep("level").exec())
+                    .append("launched every " + DELAY / 1000 +"s")
+                    .append("\n")
+                    .append(Cmd.$().cpuinfo().lines(4).exec())
+                    .append("Battery" + Cmd.$().battery().grep("level").exec())
+                    .append("Native size: " + Cmd.$().meminfo(packageName).grep("Native").regexp("([0-9]+)", 4).exec())
+                    .append(" - alloc: " + Cmd.$().meminfo(packageName).grep("Native").regexp("([0-9]+)", 5).exec())
+                    .append("\n")
+                    .append("Dalvik size: " + Cmd.$().meminfo(packageName).grep("Dalvik").regexp("([0-9]+)", 4).exec())
+                    .append(" - alloc: " + Cmd.$().meminfo(packageName).grep("Dalvik").regexp("([0-9]+)", 5).exec())
+                    .append("\n")
+                    .append("Activities: " + Cmd.$().meminfo(packageName).grep("Activities").regexp("Activities:.*([0-9]+)").exec())
+                    .append(" - Views: " + Cmd.$().meminfo(packageName).grep("Views").regexp("Views:[ ]+([0-9]+)").exec())
                     .toString();
             resultView.setText(result);
 
-            // save values
-            String cpu = Dumpsys.$().cpuInfo().grep("lifeisbetteron.com").regexp("([\\d.]*)%").exec();
-            String battery = Dumpsys.$().battery().grep("level").regexp("level: ([\\d.]*)").exec();
-            String currentTime = new SimpleDateFormat("HH:mm:ss").format(new Date());
+            // save the values by storing them on the sdcard
+            if (saveValues) {
+                String cpu = Cmd.$().cpuinfo().grep(packageName).regexp("([\\d.]*)%").exec();
+                String battery = Cmd.$().battery().grep("level").regexp("level: ([\\d.]*)").exec();
+                String currentTime = new SimpleDateFormat("HH:mm:ss").format(new Date());
 
-            fileManager.append(currentTime + "/" + cpu + "/" + battery);
+                fileManager.append(currentTime + "/" + cpu + "/" + battery);
+            }
 
-            // get the actual time
+            // get the current time
             handler.postDelayed(this, DELAY);
         }
     };
@@ -63,7 +80,11 @@ public class AppMonitorService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return super.onStartCommand(intent, flags, startId);
+        packageName = intent.getStringExtra(EXTRA_PACKAGE_NAME);
+        saveValues = intent.getBooleanExtra(EXTRA_SAVE_VALUES, false);
+
+        handler.post(repetitiveTask);
+        return Service.START_STICKY;
     }
 
     @Override
@@ -71,9 +92,9 @@ public class AppMonitorService extends Service {
         super.onCreate();
 
         // add view on top of other apps
-
         windowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         resultView = new TextView(this);
+        resultView.setBackgroundColor(getResources().getColor(R.color.background_color));
 
         resultView.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -86,16 +107,15 @@ public class AppMonitorService extends Service {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE | WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                 PixelFormat.TRANSLUCENT);
 
         params.gravity = Gravity.BOTTOM | Gravity.LEFT;
 
         resultView.setTextSize(6);
-        windowManager.addView(resultView, params);
+        resultView.setPadding(6, 6, 6, 6);
 
-        // start repetitive task
-        handler.post(repetitiveTask);
+        windowManager.addView(resultView, params);
     }
 
 

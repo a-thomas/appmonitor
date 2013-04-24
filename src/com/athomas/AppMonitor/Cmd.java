@@ -9,35 +9,45 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Dumpsys {
+public class Cmd {
 
-    private final static String TAG = Dumpsys.class.getSimpleName();
-    private final static String DUMPSYS = "dumpsys";
+    private final static String TAG = Cmd.class.getSimpleName();
 
     private String command;
     private String grepString;
     private int maxLines;
     private String regexpPattern;
+    private int occurence = -1;
 
-    private Dumpsys() {
+    private Cmd() {
         // cannot be instantiated
     }
 
-    public static Dumpsys $() {
-        return new Dumpsys();
+    public static Cmd $() {
+        return new Cmd();
     }
 
-    public Dumpsys cpuInfo() {
-        command = DUMPSYS + " cpuinfo";
+    public Cmd meminfo(String packageName) {
+        command = "dumpsys meminfo " + packageName;
         return this;
     }
 
-    public Dumpsys battery() {
-        command = DUMPSYS + " battery";
+    public Cmd cpuinfo() {
+        command = "dumpsys cpuinfo";
         return this;
     }
 
-    public Dumpsys grep(String grep) {
+    public Cmd battery() {
+        command = "dumpsys battery";
+        return this;
+    }
+
+    public Cmd ps() {
+        command = "ps";
+        return this;
+    }
+
+    public Cmd grep(String grep) {
         if (grep == null || grep.isEmpty()) {
             throw new IllegalArgumentException("The grep argument cannot be null or empty");
         }
@@ -45,7 +55,7 @@ public class Dumpsys {
         return this;
     }
 
-    public Dumpsys lines(int lines) {
+    public Cmd lines(int lines) {
         if (lines <= 0) {
             throw new IllegalArgumentException("The number of lines must be superior than 0");
         }
@@ -53,8 +63,14 @@ public class Dumpsys {
         return this;
     }
 
-    public Dumpsys regexp(String regexpPattern) {
+    public Cmd regexp(String regexpPattern) {
         this.regexpPattern = regexpPattern;
+        return this;
+    }
+
+    public Cmd regexp(String regexpPattern, int occurence) {
+        this.regexpPattern = regexpPattern;
+        this.occurence = occurence;
         return this;
     }
 
@@ -85,12 +101,24 @@ public class Dumpsys {
 
         String result = builder.toString();
 
-        // apply regexp before
+        // apply regexp before return
         if (regexpPattern != null) {
             Pattern pattern = Pattern.compile(regexpPattern);
             Matcher matcher = pattern.matcher(result);
-            while (matcher.find()) {
-                Log.d(TAG, "cool");
+
+            // return a specific occurence of the regexp
+            if (occurence > -1) {
+                for (int i = 0; i < occurence; i++) {
+                    if (!matcher.find()) {
+                        // occurence is too far
+                        return null;
+                    }
+                }
+                return matcher.group();
+            }
+
+            // return
+            if (matcher.find()) {
                 return matcher.group(1);
             }
         }
