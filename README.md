@@ -15,6 +15,6 @@ AppMonitor get these information by using `dumpsys` service commands. Therefore 
 
 * Allow to change the filename/path
 * Allow to modify the position of the monitor window
-* 
+
 
 
