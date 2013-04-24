@@ -1,4 +1,4 @@
-package com.athomas.AppMonitor;
+package com.athomas.appmonitor;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,12 +8,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import com.athomas.AppMonitor.event.StopServiceEvent;
+import com.athomas.appmonitor.event.StopServiceEvent;
 
 
 /**
  * android.permission.DUMP is a system permission.
- * You must set the permission manually by typing: adb shell pm grant com.athomas.AppMonitor android.permission.DUMP
+ * You must set the permission manually by typing: adb shell pm grant com.athomas.appmonitor android.permission.DUMP
  */
 public class MainActivity extends Activity {
 

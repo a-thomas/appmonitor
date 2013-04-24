@@ -1,4 +1,4 @@
-package com.athomas.AppMonitor;
+package com.athomas.appmonitor;
 
 import android.util.Log;
 

@@ -1,4 +1,4 @@
-package com.athomas.AppMonitor;
+package com.athomas.appmonitor;
 
 import android.app.Service;
 import android.content.Intent;
@@ -11,8 +11,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
-import com.athomas.AppMonitor.event.RemoveFileEvent;
-import com.athomas.AppMonitor.event.StopServiceEvent;
+import com.athomas.appmonitor.event.RemoveFileEvent;
+import com.athomas.appmonitor.event.StopServiceEvent;
 import com.squareup.otto.Subscribe;
 
 import java.text.SimpleDateFormat;

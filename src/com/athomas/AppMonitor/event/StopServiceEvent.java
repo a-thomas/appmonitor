@@ -1,4 +1,4 @@
-package com.athomas.AppMonitor.event;
+package com.athomas.appmonitor.event;
 
 public class StopServiceEvent {
 }

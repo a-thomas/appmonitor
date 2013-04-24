@@ -1,4 +1,4 @@
-package com.athomas.AppMonitor;
+package com.athomas.appmonitor;
 
 import com.squareup.otto.Bus;
 
