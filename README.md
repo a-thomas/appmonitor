@@ -15,7 +15,14 @@ AppMonitor get these information by using `dumpsys` service commands. Therefore 
 
 The `grant` command seems to be unavailable on certain devices. In this case, your device has to be rooted.
 
+**Dumpsys commands used:**
+
+* `dumpsys meminfo <package_name>`
+* `dumpsys cpuinfo`
+* `dumpsys battery`
+
+
 ## TODO :
 
 * Allow to change the filename/path
-* Allow to modify the position of the monitor window
+* Add more info
