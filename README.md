@@ -8,7 +8,7 @@ Display in every given seconds on top of all apps the following values:
 * the native size and alloc for a given app
 * the Dalvik size and alloc for a given app
 * the number of activities in memory for a given app
-* the number of views in memory for a given
+* the number of views in memory for a given app
 
 ![Screenshot3](https://raw.github.com/a-thomas/appmonitor/master/screenshot.png)
 
