@@ -13,7 +13,7 @@ Display in every given seconds on top of all apps the following values:
 
 AppMonitor get these information by using `dumpsys` service commands. Therefore it needs the `android.permission.DUMP` only settable through the package manager by typing `adb shell pm grant com.athomas.appmonitor android.permission.DUMP`.
 
-The `grant` command seems to be unavailable on certain devices. In this case, your device have to be rooted.
+The `grant` command seems to be unavailable on certain devices. In this case, your device has to be rooted.
 
 ## TODO :
 
