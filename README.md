@@ -24,7 +24,7 @@ AppMonitor get these information by using `dumpsys` service commands. Therefore 
 
 * `dumpsys meminfo <package_name>`
 * `dumpsys cpuinfo`
-* `dumpsys battery
+* `dumpsys battery`
 
 ## Important
 
