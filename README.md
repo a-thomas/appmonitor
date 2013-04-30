@@ -11,7 +11,7 @@ Display in every given seconds on top of all apps the following values:
 
 Modifiable parameters from UI:
 
-* Package name of the application you want to monitor
+* Package name of the monitored application
 * Max number of top processes
 * Refresh interval
 
